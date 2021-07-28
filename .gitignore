@@ -1,0 +1,9 @@
+# Spyder
+.spyproject
+
+# Python Cache
+__pycache__
+*.pyc
+
+# Houdini Backup
+houdini_scenes/backup

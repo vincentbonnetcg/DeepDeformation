@@ -6,7 +6,7 @@ from keras.layers import Input, Dense
 from keras.models import Model
 import keras
 
-class ModelOpt:
+class DeformerModel:
 
     def __init__(self):
         self.model = None

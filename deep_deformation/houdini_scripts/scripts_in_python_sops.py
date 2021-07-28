@@ -7,6 +7,7 @@ import hou
 import os
 import sys
 
+# For now working_dir == package_dir, they could be different
 working_dir = os.path.dirname(os.path.dirname(hou.hipFile.path()))
 package_dir = os.path.dirname(working_dir)
 for a_dir in [working_dir, package_dir]:
@@ -21,8 +22,6 @@ reload(gen)
 deep_deformation.common.WORKING_DIR = working_dir
 gen.export_data_from_current_frame('/obj/mocapbiped3/')
 
-
-
 ## ---------------------- ##
 ## Script to read dataset ##
 ## ---------------------- ##
@@ -30,6 +29,7 @@ import hou
 import os
 import sys
 
+# For now working_dir == package_dir, they could be different
 working_dir = os.path.dirname(os.path.dirname(hou.hipFile.path()))
 package_dir = os.path.dirname(working_dir)
 for a_dir in [working_dir, package_dir]:
@@ -37,11 +37,13 @@ for a_dir in [working_dir, package_dir]:
         sys.path.append(a_dir)
 
 import deep_deformation
+import deep_deformation.common
 from deep_deformation.houdini_scripts import hou_evaluate_dataset as ev
 reload(ev)
 
 # mode(0) => bases
 # mode(1) => smooth
 # mode(2) => predicted
-ev.read_dataset_from_current_frame(working_dir, '/obj/mocapbiped3/', mode=2)
+deep_deformation.common.WORKING_DIR = working_dir
+ev.read_dataset_from_current_frame('/obj/mocapbiped3/', mode=2)
 
