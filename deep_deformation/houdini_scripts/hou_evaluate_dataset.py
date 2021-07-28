@@ -21,7 +21,7 @@ def read_dataset_from_current_frame(sop_name, mode):
     else:
         mesh_data = clip_data.smooth_meshes
 
-    mesh = mesh_data[hou.intFrame() - 1]
+    mesh = mesh_data[(hou.intFrame() - 1) % clip_data.num_frames]
 
     node = hou.pwd()
     geo = node.geometry()

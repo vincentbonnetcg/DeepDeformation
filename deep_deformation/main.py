@@ -37,8 +37,8 @@ if __name__ == '__main__':
 
     # Create the pipeline
     pipeline = Pipeline()
-    pipeline.set_dataset(clip_name = 'SideFX_Male_walk_L_001')
+    pipeline.set_dataset(clip_name = 'SideFX_Male_walk_L_002')
     pipeline.prepare_data()
-    pipeline.train(epochs=10, batch_size=10)
+    pipeline.train(epochs=200, batch_size=10)
     pipeline.predict()
 
