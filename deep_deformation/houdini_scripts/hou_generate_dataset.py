@@ -5,6 +5,7 @@
 from .. import common
 from ..clip_data import ClipData
 from ..skeleton_data import SkeletonData
+from ..skinning_data import SkinningData
 import hou_common
 import numpy as np
 import os
@@ -124,20 +125,17 @@ def get_skinning_data(input_id):
         if len(boneids) > max_influences:
             max_influences = len(boneids)
 
+    skinning_data = SkinningData()
+    skinning_data.allocate(num_points, max_influences)
     # extract skinning data
-    data_type = {}
-    data_type['names'] = ['numInfluences', 'boneIds', 'weights']
-    data_type['formats'] = ['int8', ('int8', max_influences), ('float32', max_influences)]
-    skinning_data = np.zeros(num_points, dtype=np.dtype(data_type, align=True))
-
     for i, point in enumerate(points):
         boneIds = point.intListAttribValue('boneCapture_index')
         weights = point.floatListAttribValue('boneCapture_data')
         num_influences = len(boneIds)
-        skinning_data[i]['numInfluences'] = num_influences
+        skinning_data.data[i]['numInfluences'] = num_influences
         for j in range(num_influences):
-            skinning_data[i]['boneIds'][j] = boneIds[j]
-            skinning_data[i]['weights'][j] = weights[j]
+            skinning_data.data[i]['boneIds'][j] = boneIds[j]
+            skinning_data.data[i]['weights'][j] = weights[j]
 
     return skinning_data
 
@@ -163,12 +161,12 @@ def export_data_from_current_frame(sop_name):
     # Export skinning data
     # The skinning data is frame invariant => only write it once
     skinning_data = get_skinning_data(hou_common.SMOOTH_SKINNING_INPUT_ID)
-    skinning_path = common.get_skinning_path()
-    if not os.path.exists(skinning_path):
-        np.save(skinning_path, skinning_data)
+    skinning_data.save(overwrite=False)
 
-    # Explort clip data
+    # Export clip data
     clip_data = get_clip_data(sop_name, skeleton_data, frame_id, num_frames)
     clip_data.save()
+
+    # Console message
     clip_path = clip_data.get_clip_path(predicted=False)
     print('writing frame {}/{} from animation into the file : {}'.format(frame_id, num_frames, clip_path))
