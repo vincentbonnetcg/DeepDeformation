@@ -4,32 +4,16 @@
 """
 from .. import common
 from ..clip_data import ClipData
+from ..skeleton_data import SkeletonData
 import hou_common
 import numpy as np
 import os
 import hou
 
-def get_bone_data(sop_name, bone_names):
-    # sop_name : name of the sop network containing the bones
-    # bone_names : name of the node representing the bone
-    num_bones = len(bone_names)
-    num_attributes = len(common.BONE_ATTRIBUTES)
-    result = np.empty((num_bones, num_attributes), dtype=float)
-    for i, bone_name in enumerate(bone_names):
-        for j, attr in enumerate(common.BONE_ATTRIBUTES):
-            result[i,j] = hou.evalParm(sop_name+bone_name+'/'+attr)
 
-    return result
-
-def get_bone_parents(sop_name, bone_names):
-    parents = []
-    for bone_name in bone_names:
-        node = hou.node(sop_name+bone_name)
-        parentName = node.inputs()[0].name()
-        parents.append(parentName)
-
-    return parents
-
+'''
+ Helper functions to get geometry data
+'''
 def get_geo(input_id):
     node = hou.pwd()
     inputs = node.inputs()
@@ -48,6 +32,53 @@ def get_vertices(input_id):
 
     return pos_array
 
+'''
+ Helper functions to get the animation data
+'''
+def get_bone_data(sop_name, bone_names):
+    # sop_name : name of the sop network containing the bones
+    # bone_names : name of the node representing the bone
+    num_bones = len(bone_names)
+    num_attributes = len(common.BONE_ATTRIBUTES)
+    result = np.empty((num_bones, num_attributes), dtype=float)
+    for i, bone_name in enumerate(bone_names):
+        for j, attr in enumerate(common.BONE_ATTRIBUTES):
+            result[i,j] = hou.evalParm(sop_name+bone_name+'/'+attr)
+
+    return result
+
+def get_clip_data(sop_name, skeleton_data, frame_id, num_frames):
+    # Get bone and geometry data
+    bone_data = get_bone_data(sop_name, skeleton_data.bone_names)
+    base_mesh = get_vertices(hou_common.BASE_SKINNING_INPUT_ID)
+    smooth_mesh = get_vertices(hou_common.SMOOTH_SKINNING_INPUT_ID)
+
+     # Get the current clip name
+    clip_name = hou_common.get_current_clip_name(sop_name)
+
+    # Create clip data
+    clip_data = ClipData(clip_name)
+    clip_path = clip_data.get_clip_path(predicted=False)
+    if not os.path.exists(clip_path):
+        num_bones = len(skeleton_data.bone_names)
+        num_vertices = base_mesh.shape[0]
+        clip_data.allocate(num_bones, num_vertices, num_frames)
+    else:
+        clip_data.allocate_from_file()
+
+    # Add data to the correct frame
+    # Houdini animation clip are between [1-max_frames]
+    index = frame_id-1;
+    clip_data.bone_data[index] = bone_data
+    clip_data.base_meshes[index] = base_mesh
+    clip_data.smooth_meshes[index] = smooth_mesh
+
+    return clip_data
+
+
+'''
+ Helper functions to get skeleton data
+'''
 def get_bone_names(input_id):
     geo = get_geo(input_id)
     regions = geo.stringListAttribValue('boneCapture_pCaptPath')
@@ -59,6 +90,28 @@ def get_bone_names(input_id):
             raise Exception('region format not supported')
     return bone_names
 
+def get_bone_parent_names(sop_name, bone_names):
+    parents = []
+    for bone_name in bone_names:
+        node = hou.node(sop_name+bone_name)
+        parentName = node.inputs()[0].name()
+        parents.append(parentName)
+
+    return parents
+
+def get_skeleton_data(sop_name):
+    # Export skeleton
+    bone_names = get_bone_names(hou_common.SMOOTH_SKINNING_INPUT_ID)
+    parent_names = get_bone_parent_names(sop_name, bone_names)
+    skeleton_data = SkeletonData()
+    skeleton_data.allocate(bone_names, parent_names)
+    return skeleton_data
+
+
+
+'''
+ Helper function to get skinning data
+'''
 def get_skinning_data(input_id):
     geo = get_geo(input_id)
     points = geo.points()
@@ -88,6 +141,9 @@ def get_skinning_data(input_id):
 
     return skinning_data
 
+'''
+ Main function
+'''
 def export_data_from_current_frame(sop_name):
     # Get the dataset directory (create directory if doesn't exist)
     common.get_dataset_dir()
@@ -99,49 +155,20 @@ def export_data_from_current_frame(sop_name):
         print('do not write frame_id({}) because > max_frames({})'.format(frame_id, num_frames))
         return
 
-    # Get the current clip name
-    clip_name = hou_common.get_current_clip_name(sop_name)
-
-    # Export skeleton
+    # Export skeleton data
     # The skeleton hierarchy is frame invariant => only write it once
-    bone_names = get_bone_names(hou_common.SMOOTH_SKINNING_INPUT_ID)
-    skeleton_path = common.get_skeleton_path()
-    if not os.path.exists(skeleton_path):
-        parent_names = get_bone_parents(sop_name, bone_names)
-        with open(skeleton_path, 'w') as file_handler:
-            for i, bone_name in enumerate(bone_names):
-                file_handler.write(bone_name + ',' + parent_names[i])
-                file_handler.write('\n')
+    skeleton_data = get_skeleton_data(sop_name)
+    skeleton_data.save(overwrite=False)
 
-    # Export skinning
+    # Export skinning data
     # The skinning data is frame invariant => only write it once
     skinning_data = get_skinning_data(hou_common.SMOOTH_SKINNING_INPUT_ID)
     skinning_path = common.get_skinning_path()
     if not os.path.exists(skinning_path):
         np.save(skinning_path, skinning_data)
 
-    # Export bone and geometry dataset
-    bone_data = get_bone_data(sop_name, bone_names)
-    base_mesh = get_vertices(hou_common.BASE_SKINNING_INPUT_ID)
-    smooth_mesh = get_vertices(hou_common.SMOOTH_SKINNING_INPUT_ID)
-
-    # Create clip data
-    clip_data = ClipData(clip_name)
-    clip_path = common.get_clip_path(clip_name)
-    if not os.path.exists(clip_path):
-        num_bones = len(bone_names)
-        num_vertices = base_mesh.shape[0]
-        clip_data.allocate(num_bones, num_vertices, num_frames)
-    else:
-        clip_data.allocate_from_file()
-
-    # Save data
-    # Houdini animation clip are between [1-max_frames]
-    index = frame_id-1;
-    clip_data.bone_data[index] = bone_data
-    clip_data.base_meshes[index] = base_mesh
-    clip_data.smooth_meshes[index] = smooth_mesh
-
+    # Explort clip data
+    clip_data = get_clip_data(sop_name, skeleton_data, frame_id, num_frames)
     clip_data.save()
-
+    clip_path = clip_data.get_clip_path(predicted=False)
     print('writing frame {}/{} from animation into the file : {}'.format(frame_id, num_frames, clip_path))
