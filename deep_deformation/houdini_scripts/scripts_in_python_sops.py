@@ -16,11 +16,11 @@ for a_dir in [working_dir, package_dir]:
 
 import deep_deformation
 import deep_deformation.common
-from deep_deformation.houdini_scripts import hou_generate_dataset as gen
-reload(gen)
+from deep_deformation.houdini_scripts import hou_gen
+reload(hou_gen)
 
 deep_deformation.common.WORKING_DIR = working_dir
-gen.export_data_from_current_frame('/obj/mocapbiped3/')
+hou_gen.export_data_from_current_frame('/obj/mocapbiped3/')
 
 ## ---------------------- ##
 ## Script to read dataset ##
@@ -38,12 +38,12 @@ for a_dir in [working_dir, package_dir]:
 
 import deep_deformation
 import deep_deformation.common
-from deep_deformation.houdini_scripts import hou_evaluate_dataset as ev
-reload(ev)
+from deep_deformation.houdini_scripts import hou_eval
+reload(hou_eval)
 
 # mode(0) => bases
 # mode(1) => smooth
 # mode(2) => predicted
 deep_deformation.common.WORKING_DIR = working_dir
-ev.read_dataset_from_current_frame('/obj/mocapbiped3/', mode=2)
+hou_eval.read_dataset_from_current_frame('/obj/mocapbiped3/', mode=2)
 
