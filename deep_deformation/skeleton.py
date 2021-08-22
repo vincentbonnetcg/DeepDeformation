@@ -6,6 +6,8 @@ skeleton.load(filename)
 skeleton.print_root()
 """
 
+from skeleton_data import SkeletonData
+
 class Bone:
     def __init__(self, name):
         self.name = name
@@ -14,23 +16,28 @@ class Bone:
 
 class Skeleton:
     def __init__(self):
+        self.root = None # Bone root
+        self.bones = {} # Map associating name with Bone
+        self.clear()
+
+    def clear(self):
         self.root = None
-        self.bones = {} # map name with bone
+        self.bones = {}
 
-    def load(self, filename):
-        with open(filename, 'r')  as file:
-            # collect and add bones
-            bone_data = []
-            for line in file:
-                if len(line)==0:
-                    continue
-                data = line.strip().split(',')
-                bone_data.append(data)
-                self.add_bone(bone_name=data[0])
+    def load(self, filepath):
+        self.clear()
 
-            # parent bones
-            for data in bone_data:
-                self.parent(bone_name=data[0], parent_name=data[1])
+        skeleton_data = SkeletonData()
+        skeleton_data.load()
+
+        # Add bone
+        for bone_name in skeleton_data.bone_names:
+            self.add_bone(bone_name)
+
+        # Add parent
+        for i, parent_name in enumerate(skeleton_data.parent_names):
+            self.parent(skeleton_data.bone_names[i], parent_name)
+
 
     def add_bone(self, bone_name):
         if bone_name in self.bones:
@@ -39,8 +46,10 @@ class Skeleton:
         self.bones[bone_name] = Bone(bone_name)
 
     def parent(self, bone_name, parent_name):
-        bone = self.bones[bone_name]
+        bone = self.bones.get(bone_name, None)
         parent = self.bones.get(parent_name, None)
+
+        assert(bone)
 
         # parent None is considered the root
         if not parent:

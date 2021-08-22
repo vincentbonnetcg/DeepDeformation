@@ -5,11 +5,11 @@
 
 import common
 import os
+import json
 
 class SkeletonData:
 
     def __init__(self):
-        # infos
         self.bone_names = []
         self.parent_names = []
 
@@ -23,9 +23,19 @@ class SkeletonData:
         if os.path.exists(skeleton_path) and overwrite==False:
             return
 
-        with open(skeleton_path, 'w') as file_handler:
-            # TODO : write with a dictionnary
-            for i, bone_name in enumerate(self.bone_names):
-                file_handler.write(bone_name + ',' + self.parent_names[i])
-                file_handler.write('\n')
+        details = {}
+        details['bone_names'] = self.bone_names
+        details['parent_names'] = self.parent_names
 
+        with open(skeleton_path, 'w') as file_handler:
+            file_handler.write(json.dumps(details))
+
+    def load(self):
+        skeleton_path = common.get_skeleton_path()
+
+        with open(skeleton_path, 'r') as file_handler:
+            details = json.load(file_handler)
+            self.bone_names = details['bone_names']
+            self.parent_names = details['parent_names']
+
+        assert(len(self.bone_names) == len(self.parent_names))
