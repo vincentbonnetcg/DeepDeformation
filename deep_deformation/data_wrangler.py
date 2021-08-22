@@ -22,6 +22,8 @@ def prepare_data(clip_data, example_ids):
     num_examples = clip_data.num_frames
     num_examples_ids = len(example_ids)
 
+    # TODO : replace the bases with a skinning algorithm
+
     assert(num_examples_ids <= num_examples)
 
     in_shape = np.prod(bones.shape[1:])

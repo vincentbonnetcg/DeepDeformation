@@ -139,12 +139,12 @@ def get_skinning_data(input_id):
     skinning_data.allocate(num_points, max_influences)
     # extract skinning data
     for i, point in enumerate(points):
-        boneIds = point.intListAttribValue('boneCapture_index')
+        bones_ids = point.intListAttribValue('boneCapture_index')
         weights = point.floatListAttribValue('boneCapture_data')
-        num_influences = len(boneIds)
-        skinning_data.data[i]['numInfluences'] = num_influences
-        for j in range(num_influences):
-            skinning_data.data[i]['boneIds'][j] = boneIds[j]
-            skinning_data.data[i]['weights'][j] = weights[j]
+        num_weights = len(bones_ids)
+        skinning_data.num_weights[i] = num_weights
+        for j in range(num_weights):
+            skinning_data.bones_ids[i][j] = bones_ids[j]
+            skinning_data.weights[i][j] = weights[j]
 
     return skinning_data

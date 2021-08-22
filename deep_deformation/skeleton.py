@@ -24,11 +24,8 @@ class Skeleton:
         self.root = None
         self.bones = {}
 
-    def load(self, filepath):
+    def set(self, skeleton_data : SkeletonData):
         self.clear()
-
-        skeleton_data = SkeletonData()
-        skeleton_data.load()
 
         # Add bone
         for bone_name in skeleton_data.bone_names:

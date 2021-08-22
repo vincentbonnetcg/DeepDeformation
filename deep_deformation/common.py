@@ -36,7 +36,7 @@ def get_skeleton_path():
     return os.path.join(get_dataset_dir(), 'skeleton.txt')
 
 def get_skinning_path():
-    return os.path.join(get_dataset_dir(), 'skinning.npy')
+    return os.path.join(get_dataset_dir(), 'skinning.npz')
 
 def get_clip_path(clip_name):
     return os.path.join(get_dataset_dir(), clip_name+'.npz')
