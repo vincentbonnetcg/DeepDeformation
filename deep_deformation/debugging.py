@@ -28,8 +28,7 @@ def dataset_summary():
     print('skeleton file : ' + str(os.path.exists(skeleton_path)))
     skeleton_data = SkeletonData()
     skeleton_data.load()
-    skeleton = Skeleton()
-    skeleton.set(skeleton_data)
+    skeleton = Skeleton(skeleton_data)
     skeleton.print_root()
 
 def skinning_test():

@@ -52,7 +52,7 @@ class Pipeline:
 
         # Load a clip from databset and update the smooth attribute
         clip = ClipData(self.clip_name)
-        clip.allocate_from_file(predicted=False)
+        clip.load(predicted=False)
         clip.smooth_meshes = clip.base_meshes + y_predicted
         clip.save(predicted=True)
 

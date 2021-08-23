@@ -38,7 +38,7 @@ class ClipData:
         self.base_meshes = np.empty(base_mesh_shape, dtype=float)
         self.smooth_meshes = np.empty(smooth_mesh_shape, dtype=float)
 
-    def allocate_from_file(self, predicted = False):
+    def load(self, predicted = False):
         clip_path = self.get_clip_path(predicted)
         npzfile = np.load(clip_path)
         # set data

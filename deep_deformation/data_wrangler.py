@@ -45,7 +45,7 @@ def prepare_data(clip_data, example_ids):
 def load_dataset(clip_name, validation_ratio = 0.1):
     # load a single dataset and split between train and validation data
     clip_data = ClipData(clip_name)
-    clip_data.allocate_from_file(predicted = False)
+    clip_data.load(predicted = False)
     num_examples = clip_data.num_frames
 
     if (validation_ratio == 0.0):

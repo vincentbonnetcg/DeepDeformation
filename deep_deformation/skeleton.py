@@ -15,17 +15,9 @@ class Bone:
         self.parent = None
 
 class Skeleton:
-    def __init__(self):
+    def __init__(self, skeleton_data : SkeletonData):
         self.root = None # Bone root
         self.bones = {} # Map associating name with Bone
-        self.clear()
-
-    def clear(self):
-        self.root = None
-        self.bones = {}
-
-    def set(self, skeleton_data : SkeletonData):
-        self.clear()
 
         # Add bone
         for bone_name in skeleton_data.bone_names:
@@ -35,6 +27,9 @@ class Skeleton:
         for i, parent_name in enumerate(skeleton_data.parent_names):
             self.parent(skeleton_data.bone_names[i], parent_name)
 
+    def clear(self):
+        self.root = None
+        self.bones = {}
 
     def add_bone(self, bone_name):
         if bone_name in self.bones:
