@@ -13,7 +13,7 @@ def read_dataset_from_current_frame(sop_name, mode):
     clip_name = hou_utils.get_current_clip_name(sop_name)
 
     clip_data = ClipData(clip_name)
-    clip_data.allocate_from_file(predicted = (mode == 2))
+    clip_data.load(predicted = (mode == 2))
 
     mesh_data = None
     if mode == 0:

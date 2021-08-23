@@ -76,7 +76,7 @@ def get_clip_data(sop_name, skeleton_data, frame_id, num_frames):
         num_vertices = base_mesh.shape[0]
         clip_data.allocate(num_bones, num_vertices, num_frames)
     else:
-        clip_data.allocate_from_file()
+        clip_data.load()
 
     # Add data to the correct frame
     # Houdini animation clip are between [1-max_frames]
