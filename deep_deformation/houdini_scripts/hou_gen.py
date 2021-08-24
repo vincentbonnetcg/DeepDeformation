@@ -10,12 +10,9 @@ def export_data_from_current_frame(sop_name):
     # Get the dataset directory (create directory if doesn't exist)
     common.get_dataset_dir()
 
-    # Check the frame is in a valid range
-    num_frames = hou.evalParm(sop_name+'/nFrames')
-    frame_id = hou.intFrame()
-    if frame_id > num_frames or frame_id <= 0:
-        print('do not write frame_id({}) because > max_frames({})'.format(frame_id, num_frames))
-        return
+    # Special case to handle the rest pose
+    clip_name = hou_utils.get_current_clip_name(sop_name)
+    is_pose_clip = (clip_name == common.REST_POSE_CLIP_NAME)
 
     # Export skeleton data
     # The skeleton hierarchy is frame invariant => only write it once
@@ -27,10 +24,23 @@ def export_data_from_current_frame(sop_name):
     skinning_data = hou_utils.get_skinning_data(hou_utils.SMOOTH_SKINNING_INPUT_ID)
     skinning_data.save(overwrite=False)
 
-    # Export clip data
-    clip_data = hou_utils.get_clip_data(sop_name, skeleton_data, frame_id, num_frames)
-    clip_data.save()
+    if is_pose_clip:
+        reset_pose_data = hou_utils.get_rest_pose_data(sop_name, skeleton_data)
+        reset_pose_data.save(overwrite =False)
+        print('Write the rest pose')
+    else:
+        ## Export the clip
+        # Check the frame is in a valid range
+        num_frames = hou.evalParm(sop_name+'/nFrames')
+        frame_id = hou.intFrame()
+        if frame_id > num_frames or frame_id <= 0:
+            print('do not write frame_id({}) because > max_frames({})'.format(frame_id, num_frames))
+            return
 
-    # Console message
-    clip_path = clip_data.get_clip_path(predicted=False)
-    print('writing frame {}/{} from animation into the file : {}'.format(frame_id, num_frames, clip_path))
+        # Export clip data
+        clip_data = hou_utils.get_clip_data(sop_name, skeleton_data, frame_id, num_frames)
+        clip_data.save()
+
+        # Console message
+        clip_path = clip_data.get_clip_path(predicted=False)
+        print('writing frame {}/{} from animation into the file : {}'.format(frame_id, num_frames, clip_path))

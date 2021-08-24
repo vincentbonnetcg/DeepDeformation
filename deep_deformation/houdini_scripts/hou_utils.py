@@ -7,6 +7,7 @@ from .. import common
 from ..clip_data import ClipData
 from ..skeleton_data import SkeletonData
 from ..skinning_data import SkinningData
+from ..rest_pose_data import RestPoseData
 import numpy as np
 import hou
 import os
@@ -148,3 +149,16 @@ def get_skinning_data(input_id):
             skinning_data.weights[i][j] = weights[j]
 
     return skinning_data
+
+'''
+ Helper functions to get the rest post data
+'''
+def get_rest_pose_data(sop_name, skeleton_data):
+    num_bones = len(skeleton_data.bone_names)
+    bone_data = get_bone_data(sop_name, skeleton_data.bone_names)
+    rest_pose_data = RestPoseData()
+    rest_pose_data.allocate(num_bones)
+    assert(rest_pose_data.bone_data.shape == bone_data.shape)
+    np.copyto(rest_pose_data.bone_data, bone_data)
+    return rest_pose_data
+

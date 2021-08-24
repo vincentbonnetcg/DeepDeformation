@@ -11,6 +11,7 @@ WORKING_DIR = None
 DATASET_FOLDER = 'dataset'
 PREDICTION_FOLDER = 'prediction'
 BONE_ATTRIBUTES = ['rx', 'ry', 'rz', 'length']
+REST_POSE_CLIP_NAME = 'SideFX_Male_t_pose_001'
 
 def get_dataset_dir():
     '''
@@ -31,6 +32,9 @@ def get_prediction_dir():
     if not os.path.exists(prediction_dir):
         os.makedirs(prediction_dir)
     return prediction_dir
+
+def get_rest_pose_path():
+    return os.path.join(get_dataset_dir(), 'rest_pose.npz')
 
 def get_skeleton_path():
     return os.path.join(get_dataset_dir(), 'skeleton.txt')
