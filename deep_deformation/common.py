@@ -34,7 +34,7 @@ def get_prediction_dir():
     return prediction_dir
 
 def get_rest_pose_path():
-    return os.path.join(get_dataset_dir(), 'rest_pose.npz')
+    return os.path.join(get_dataset_dir(), 'rest_pose.npy')
 
 def get_skeleton_path():
     return os.path.join(get_dataset_dir(), 'skeleton.txt')

@@ -1,6 +1,14 @@
 """
 @author: Vincent Bonnet
-@description : Skeleton data contains bones and respective
+@description : Skeleton data contains bones and bone parents
+
+File Format:
+ Json file
+
+Content:
+ 2 lists
+  - List of string for bone names
+  - List of string for parent bone names
 """
 
 import common

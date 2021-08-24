@@ -1,6 +1,15 @@
 """
 @author: Vincent Bonnet
 @description : Clip data is an animation clip
+
+File Format:
+ numpy file (npz)
+
+Content:
+ 3 numpy arrays
+  - 'bones' : float_array(num_frames, num_bones, size(BONE_ATTRIBUTES))
+  - 'bases' : float_array(num_frames, num_vertices, 3)
+  - 'smooths' : float_array(num_frames, num_vertices, 3)
 """
 
 import common

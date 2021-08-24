@@ -1,6 +1,16 @@
 """
 @author: Vincent Bonnet
 @description : Skinning data
+
+File Format:
+ numpy file (npz)
+
+Content:
+ 4 numpy arrays
+  - 'num_weights' : int_array(num_points)
+  - 'bones_ids' : int_array(num_points, max_influences)
+  - 'weights' : float_array(num_points, max_influences)
+  - 'vertices' : float_array(num_points, 3)
 """
 
 import common

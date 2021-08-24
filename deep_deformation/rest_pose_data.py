@@ -1,6 +1,13 @@
 """
 @author: Vincent Bonnet
 @description : Rest pose of a skeleton
+
+File Format:
+ numpy file (npy)
+
+Content:
+ 1 numpy array
+  - float_array(num_bones, size(BONE_ATTRIBUTES))
 """
 
 import common

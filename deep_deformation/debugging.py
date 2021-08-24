@@ -9,7 +9,7 @@ from skinning import Skinning
 from skeleton_data import SkeletonData
 from skinning_data import SkinningData
 from clip_data import ClipData
-import fnmatch,os
+import fnmatch, os
 
 def dataset_summary():
     dataset_dir = common.get_dataset_dir()
