@@ -14,19 +14,21 @@ def export_data_from_current_frame(sop_name):
     clip_name = hou_utils.get_current_clip_name(sop_name)
     is_pose_clip = (clip_name == common.REST_POSE_CLIP_NAME)
 
-    # Export skeleton data
-    # The skeleton hierarchy is frame invariant => only write it once
-    skeleton_data = hou_utils.get_skeleton_data(sop_name)
-    skeleton_data.save(overwrite=False)
-
-    # Export skinning data
-    # The skinning data is frame invariant => only write it once
-    skinning_data = hou_utils.get_skinning_data(hou_utils.SMOOTH_SKINNING_INPUT_ID)
-    skinning_data.save(overwrite=False)
-
     if is_pose_clip:
+        # Export skeleton data
+        # The skeleton hierarchy is frame invariant => only write it once
+        skeleton_data = hou_utils.get_skeleton_data(sop_name)
+        skeleton_data.save(overwrite=False)
+
+        # Export skinning data
+        # The skinning data is frame invariant => only write it once
+        skinning_data = hou_utils.get_skinning_data()
+        skinning_data.save(overwrite=False)
+
+        # Export the rest pose
         reset_pose_data = hou_utils.get_rest_pose_data(sop_name, skeleton_data)
         reset_pose_data.save(overwrite =False)
+
         print('Write the rest pose')
     else:
         ## Export the clip
@@ -38,7 +40,7 @@ def export_data_from_current_frame(sop_name):
             return
 
         # Export clip data
-        clip_data = hou_utils.get_clip_data(sop_name, skeleton_data, frame_id, num_frames)
+        clip_data = hou_utils.get_clip_data(sop_name, frame_id, num_frames)
         clip_data.save()
 
         # Console message

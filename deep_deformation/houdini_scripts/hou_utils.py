@@ -60,7 +60,9 @@ def get_bone_data(sop_name, bone_names):
 
     return result
 
-def get_clip_data(sop_name, skeleton_data, frame_id, num_frames):
+def get_clip_data(sop_name, frame_id, num_frames):
+    # Get skeleton data
+    skeleton_data = get_skeleton_data(sop_name)
     # Get bone and geometry data
     bone_data = get_bone_data(sop_name, skeleton_data.bone_names)
     base_mesh = get_vertices(BASE_SKINNING_INPUT_ID)
@@ -124,7 +126,8 @@ def get_skeleton_data(sop_name):
 '''
  Helper function to get skinning data
 '''
-def get_skinning_data(input_id):
+def get_skinning_data():
+    input_id = BASE_SKINNING_INPUT_ID
     geo = get_geo(input_id)
     points = geo.points()
     num_points = len(points)
@@ -148,6 +151,10 @@ def get_skinning_data(input_id):
             skinning_data.bones_ids[i][j] = bones_ids[j]
             skinning_data.weights[i][j] = weights[j]
 
+    # set vertex positions
+    vertices = get_vertices(input_id)
+    assert(skinning_data.vertices.shape == vertices.shape)
+    np.copyto(skinning_data.vertices, vertices)
     return skinning_data
 
 '''
