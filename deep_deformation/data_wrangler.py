@@ -19,7 +19,7 @@ def prepare_data(clip_data, example_ids):
     bones = clip_data.bone_data
     bases = clip_data.base_meshes
     smooths = clip_data.smooth_meshes
-    num_examples = clip_data.num_frames
+    num_examples = clip_data.num_frames()
     num_examples_ids = len(example_ids)
 
     # TODO : replace the bases with a skinning algorithm
@@ -46,7 +46,7 @@ def load_dataset(clip_name, validation_ratio = 0.1):
     # load a single dataset and split between train and validation data
     clip_data = ClipData(clip_name)
     clip_data.load(predicted = False)
-    num_examples = clip_data.num_frames
+    num_examples = clip_data.num_frames()
 
     if (validation_ratio == 0.0):
         return prepare_data(clip_data, range(num_examples))

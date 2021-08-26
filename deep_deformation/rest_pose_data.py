@@ -21,7 +21,7 @@ class RestPoseData:
 
     def allocate(self, num_bones):
         bone_data_shape = (num_bones, len(common.BONE_ATTRIBUTES))
-        self.bone_data = np.empty(bone_data_shape, dtype=float)
+        self.bone_data = np.zeros(bone_data_shape, dtype=float)
 
     def save(self, overwrite = False):
         rest_path = common.get_rest_pose_path()

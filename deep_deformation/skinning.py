@@ -10,11 +10,11 @@ from clip_data import ClipData
 
 class Skinning:
 
-    def __init__(self, skeleton : SkeletonData, skinning : SkinningData):
-        self.skeleton = skeleton
-        self.skinning = skinning
+    def __init__(self, skeleton_data : SkeletonData, skinning_data : SkinningData):
+        self.skeleton_data = skeleton_data
+        self.skinning_data = skinning_data
 
-    def get_vertices_from_clip(self, clip : ClipData):
+    def get_vertices_from_clip(self, clip_data : ClipData):
         # TODO
         pass
 
