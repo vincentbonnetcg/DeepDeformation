@@ -3,9 +3,9 @@
 @description : Skinning algorithms. Implement the Linear Blend Skinning (LBS)
 """
 
-from skeleton_data import SkeletonData
-from skinning_data import SkinningData
-from clip_data import ClipData
+from deep_deformation.objects.skeleton_data import SkeletonData
+from deep_deformation.objects.skinning_data import SkinningData
+from deep_deformation.objects.clip_data import ClipData
 
 
 class Skinning:

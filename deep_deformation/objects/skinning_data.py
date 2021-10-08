@@ -13,7 +13,7 @@ Content:
   - 'vertices' : float_array(num_points, 3)
 """
 
-import common
+import deep_deformation.utils.common as common
 import numpy as np
 import os
 

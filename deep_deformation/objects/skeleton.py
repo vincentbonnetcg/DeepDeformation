@@ -6,7 +6,7 @@ skeleton.load(filename)
 skeleton.print_root()
 """
 
-from skeleton_data import SkeletonData
+from deep_deformation.objects.skeleton_data import SkeletonData
 
 class Bone:
     def __init__(self, name):
@@ -66,5 +66,4 @@ class Skeleton:
         print('|'+'-' * space + node.name)
         for child in node.children:
             self._print_hierarchy(child, space+2)
-
 

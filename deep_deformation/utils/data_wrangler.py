@@ -3,8 +3,7 @@
 @description : Prepare input data for the model
 """
 
-
-from clip_data import ClipData
+from deep_deformation.objects.clip_data import ClipData
 import numpy as np
 
 '''

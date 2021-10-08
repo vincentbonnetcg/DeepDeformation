@@ -11,7 +11,7 @@ Content:
   - List of string for parent bone names
 """
 
-import common
+import deep_deformation.utils.common as common
 import os
 import json
 

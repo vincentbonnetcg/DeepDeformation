@@ -10,7 +10,7 @@ Content:
   - float_array(num_bones, size(BONE_ATTRIBUTES))
 """
 
-import common
+import deep_deformation.utils.common as common
 import os
 import numpy as np
 

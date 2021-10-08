@@ -9,6 +9,8 @@ WORKING_DIR = None
 
 # Constants
 DATASET_FOLDER = 'dataset'
+RAW_FOLDER = 'raw'
+PROCESSED_FLDER = 'processed'
 PREDICTION_FOLDER = 'prediction'
 BONE_ATTRIBUTES = ['rx', 'ry', 'rz', 'length']
 REST_POSE_CLIP_NAME = 'SideFX_Male_t_pose_001'

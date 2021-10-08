@@ -12,7 +12,7 @@ Content:
   - 'smooths' : float_array(num_frames, num_vertices, 3)
 """
 
-import common
+import deep_deformation.utils.common as common
 import numpy as np
 
 class ClipData:

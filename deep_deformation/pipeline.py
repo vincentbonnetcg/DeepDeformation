@@ -3,9 +3,9 @@
 @description : The all pipleine to load+prepare data, create, train and evaluate model
 """
 
-import data_wrangler
-from clip_data import ClipData
-from models import DeformerModel
+from deep_deformation.utils.data_wrangler import load_dataset
+from deep_deformation.objects.clip_data import ClipData
+from deep_deformation.models.base_model import DeformerModel
 
 class Pipeline:
 
@@ -25,7 +25,7 @@ class Pipeline:
         self.clip_name = clip_name
 
     def prepare_data(self):
-        result = data_wrangler.load_dataset(self.clip_name)
+        result = load_dataset(self.clip_name)
         self.x_train = result[0]
         self.y_train = result[1]
         self.x_valid = result[2]
@@ -44,7 +44,7 @@ class Pipeline:
 
     def predict(self):
         # Predict the shapes
-        x_test, y_test = data_wrangler.load_dataset(self.clip_name, validation_ratio=0.0)
+        x_test, y_test = load_dataset(self.clip_name, validation_ratio=0.0)
         y_predicted = self.model.predict(x_test)
         new_shape = (y_predicted.shape[0], int(y_predicted.shape[1] / 3), 3)
         y_predicted = y_predicted.reshape(new_shape)

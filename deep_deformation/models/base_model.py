@@ -2,9 +2,9 @@
 @author: Vincent Bonnet
 @description : Optimizer for the problem
 """
+import keras
 from keras.layers import Input, Dense
 from keras.models import Model
-import keras
 
 class DeformerModel:
 
