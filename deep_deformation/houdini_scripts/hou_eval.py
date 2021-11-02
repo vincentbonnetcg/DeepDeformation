@@ -2,7 +2,7 @@
 @author: Vincent Bonnet
 @description : Python code to test the training data
 """
-from ..clip_data import ClipData
+from deep_deformation.objects.clip_data import ClipData
 import hou_utils
 import hou
 
@@ -21,7 +21,7 @@ def read_dataset_from_current_frame(sop_name, mode):
     else:
         mesh_data = clip_data.smooth_meshes
 
-    mesh = mesh_data[(hou.intFrame() - 1) % clip_data.num_frames]
+    mesh = mesh_data[(hou.intFrame() - 1) % clip_data.num_frames()]
 
     node = hou.pwd()
     geo = node.geometry()

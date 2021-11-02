@@ -3,11 +3,11 @@
 @description : Python utilities to get data from Houdini
 """
 
-from .. import common
-from ..clip_data import ClipData
-from ..skeleton_data import SkeletonData
-from ..skinning_data import SkinningData
-from ..rest_pose_data import RestPoseData
+from deep_deformation.utils import common
+from deep_deformation.objects.clip_data import ClipData
+from deep_deformation.objects.skeleton_data import SkeletonData
+from deep_deformation.objects.skinning_data import SkinningData
+from deep_deformation.objects.rest_pose_data import RestPoseData
 import numpy as np
 import hou
 import os

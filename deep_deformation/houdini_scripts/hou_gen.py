@@ -2,7 +2,7 @@
 @author: Vincent Bonnet
 @description : Python code to export bone and point data into a dataset folder
 """
-from .. import common
+from deep_deformation.utils import common
 import hou_utils
 import hou
 
