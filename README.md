@@ -1,4 +1,4 @@
-# Deep Deformation
+# Deep Deformation (WIP !)
 This is an early implementation of the "Fast and Deep Deformation Approximations".  The input data (meshes, bones, animation) are from Houdini extracted from **MocapBiped3** node. A neural network learns the non linear deformation from the smooth skinning and add details to the cheaper rigid skinning. 
 
 ### Remaining tasks
